@@ -169,12 +169,13 @@ UI.resume();
 //===[ Main Loop]=============================================
 
 //this is the infinite mining loop
+let block = undefined;
 setInterval(() => {    
     if (!UI.paused) {
         UI.readline.cursorTo(process.stdout, 3, 4);
         
         //first create a block
-        const block = createBlock();
+        if (block === undefined) block = createBlock();
 
         //try mining with the current nonce
         const goldenBlock = mine(block);        
@@ -183,6 +184,9 @@ setInterval(() => {
             //if we are here, a new block has been mined and added to the blockchain
             //display it
             displayStats(block);
+
+            //set the block to undefined so we notify the mining loop to create a new one
+            block = undefined;
 
             //pause mining and wait for user input
             UI.showPrompt();                
